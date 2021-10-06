@@ -1,8 +1,8 @@
 // -*- mode: c++ -*-
 
 // ----------------------------------------------------------
-// Jordi Bataller i Mascarell
-// 2019-07-07
+// Rubén Pardo Casanova
+// 2021-09-14
 // ----------------------------------------------------------
 #ifndef EMISORA_H_INCLUIDO
 #define EMISORA_H_INCLUIDO
@@ -33,11 +33,28 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * N -> () 
+   * @param connHandle codigo que se envia para identificar la conexion en el callback
+   */
   using CallbackConexionEstablecida = void ( uint16_t connHandle );
+  /**
+   * N -> () 
+   * @param connHandle codigo que se envia para identificar la conexion en el callback
+   * @param reason razon por la cual la conexion se ha terminado
+   */
   using CallbackConexionTerminada = void ( uint16_t connHandle, uint8_t reason);
 
   // .........................................................
   // .........................................................
+  /**
+   * Constructor para la clase EmisoraBLE
+   *
+   * @param nombreEmisora_ 
+   * @param fabricanteID_ 
+   * @param txPower_ parametro txPower para el beacon del bluetooth
+   *
+   */
   EmisoraBLE( const char * nombreEmisora_, const uint16_t fabricanteID_,
 			  const int8_t txPower_ ) 
 	:
@@ -72,6 +89,11 @@ public:
 	
   // .........................................................
   // .........................................................
+  /**
+   * encenderEmisora()
+   * Enciende la emisora bluetooth
+   * 
+   */
   void encenderEmisora() {
 	// Serial.println ( "Bluefruit.begin() " );
 	 Bluefruit.begin(); 
@@ -82,6 +104,11 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * CallbackConexionEstablecida, CallbackConexionTerminada -> encenderEmisora()
+   * Enciende la emisora bluetooth e instala los callback de conexión establecida y terminada
+   * 
+   */
   void encenderEmisora( CallbackConexionEstablecida cbce,
 						CallbackConexionTerminada cbct ) {
 
@@ -94,6 +121,11 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * detenerAnuncio()
+   * Detiene los beacon de aviso si se estan emitiendo
+   * 
+   */
   void detenerAnuncio() {
 
 	if ( (*this).estaAnunciando() ) {
@@ -104,14 +136,26 @@ public:
   }  // ()
   
   // .........................................................
-  // estaAnunciando() -> Boleano
   // .........................................................
+  /**
+   * estaAnunciando() -> T/F
+   *
+   * @returns True si el Bluefruit esta emitiendo beacons de aviso
+   */
   bool estaAnunciando() {
 	return Bluefruit.Advertising.isRunning();
   } // ()
 
   // .........................................................
   // .........................................................
+  /**
+   * Texto, N, N, N -> emitirAnuncioIBeacon()
+   *
+   * @param beaconUUID uuid del beacon bluetooth
+   * @param major valor "major" del ibeacon (para mejorar la identificacion del beacon)
+   * @param minor valor "minor" del ibeacon (para mejorar la identificacion del beacon)
+   * @param rssi valor "rssi" del ibeacon (indica la distancia máxima de transmision)
+   */
   void emitirAnuncioIBeacon( uint8_t * beaconUUID, int16_t major, int16_t minor, uint8_t rssi ) {
 
 	//
@@ -200,6 +244,13 @@ public:
 
 	const uint8_t tamanyoCarga = strlen( carga );
   */
+  /**
+   * Texto, N -> emitirAnuncioIBeaconLibre()
+   *
+   * @param carga codigo hexadecimal con los datos del beacon
+   * @param tamayoCarga longitud del codigo hexadecimal
+   * ´
+   */
   void emitirAnuncioIBeaconLibre( const char * carga, const uint8_t tamanyoCarga ) {
 
 	(*this).detenerAnuncio(); 
@@ -262,6 +313,13 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * ServicioEnEmisora -> anyadirServicio() -> T/F
+   *
+   * @param servicio ServicioEnEmisora a anyadir.
+   *
+   * @returns True si se pudo anyadir el servicio
+   */
   bool anyadirServicio( ServicioEnEmisora & servicio ) {
 
 	Globales::elPuerto.escribir( " Bluefruit.Advertising.addService( servicio ); \n");
@@ -281,11 +339,27 @@ public:
   
   // .........................................................
   // .........................................................
+  /**
+   * ServicioEmisora -> anyadirServicio() -> T/F
+   *
+   * @param servicio ServicioEnEmisora a anyadir
+   *
+   * @returns True si se anyadio el servicio correctamente.
+   */
   bool anyadirServicioConSusCaracteristicas( ServicioEnEmisora & servicio ) { 
-	return (*this).anyadirServicio( servicio );
+	  return (*this).anyadirServicio( servicio );
   } // 
 
   // .........................................................
+  /**
+   * ServicioEmisora, Caracteristica, Lista<T> -> anyadirServicioConSusCaracterisitcas() -> T/F
+   *
+   * @param servicio ServicioEnEmisora a anyadir
+   * @param caracteristica Caracteristica del servicio
+   * @param restoCaracteristicas Lista de caracterisiticas restantes a anyadir
+   *
+   * @returns True si se anyadio el servicio correctamente con sus caracteristicas
+   */
   template <typename ... T>
   bool anyadirServicioConSusCaracteristicas( ServicioEnEmisora & servicio,
 											 ServicioEnEmisora::Caracteristica & caracteristica,
@@ -298,6 +372,14 @@ public:
   } // ()
 
   // .........................................................
+  /**
+   * ServicioEmisora, Lista<T> -> anyadirServicioConSusCaracterisitcas() -> T/F
+   *
+   * @param servicio ServicioEnEmisora a anyadir y activar
+   * @param restoCaracteristicas Lista de caracterisiticas restantes a anyadir del servicio
+   *
+   * @returns True si se anyadio el servicio correctamente con sus caracteristicas
+   */
   template <typename ... T>
   bool anyadirServicioConSusCaracteristicasYActivar( ServicioEnEmisora & servicio,
 													 // ServicioEnEmisora::Caracteristica & caracteristica,
@@ -313,20 +395,39 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * CallbackConexionEstablecida -> instalarCallbackConexionEstablecida() 
+   *
+   * @param cb Establece el callback para la conexion establecida 
+   *
+   */
   void instalarCallbackConexionEstablecida( CallbackConexionEstablecida cb ) {
-	Bluefruit.Periph.setConnectCallback( cb );
+	  Bluefruit.Periph.setConnectCallback( cb );
   } // ()
 
   // .........................................................
   // .........................................................
+  /**
+   * CallbackConexionTerminada -> instalarCallbackConexionTerminada() 
+   *
+   * @param cb Establece el callback para la conexion terminada 
+   *
+   */
   void instalarCallbackConexionTerminada( CallbackConexionTerminada cb ) {
-	Bluefruit.Periph.setDisconnectCallback( cb );
+	  Bluefruit.Periph.setDisconnectCallback( cb );
   } // ()
 
   // .........................................................
   // .........................................................
+  /**
+   * N -> getConexion() -> BLEConnection 
+   *
+   * @param connHandle 
+   *
+   * @returns Devuelve la conexion bluetooth
+   */
   BLEConnection * getConexion( uint16_t connHandle ) {
-	return Bluefruit.Connection( connHandle );
+	  return Bluefruit.Connection( connHandle );
   } // ()
 
 }; // class
@@ -337,4 +438,3 @@ public:
 // ----------------------------------------------------------
 // ----------------------------------------------------------
 // ----------------------------------------------------------
-

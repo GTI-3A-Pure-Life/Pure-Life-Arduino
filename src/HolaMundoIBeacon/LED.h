@@ -4,12 +4,18 @@
 #define LED_H_INCLUIDO
 
 // ----------------------------------------------------------
-// Jordi Bataller i Mascarell
-// 2019-07-07
+// Rubén Pardo Casanova
+// 2021-09-14
 // ----------------------------------------------------------
 
 // ----------------------------------------------------------
 // ----------------------------------------------------------
+/**
+ * N -> esperar()
+ *
+ * @param tiempo ms a esperar.
+ *
+ */
 void esperar (long tiempo) {
   delay (tiempo);
 }
@@ -24,6 +30,12 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * Constructor para la clase LED
+   *
+   * @param numero pin donde esta conectado el LED
+   *
+   */
   LED (int numero)
 	: numeroLED (numero), encendido(false)
   {
@@ -33,6 +45,10 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * encender()
+   *
+   */
   void encender () {
 	digitalWrite(numeroLED, HIGH); 
 	encendido = true;
@@ -40,6 +56,10 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * apagar()
+   *
+   */
   void apagar () {
 	  digitalWrite(numeroLED, LOW);
 	  encendido = false;
@@ -47,20 +67,30 @@ public:
 
   // .........................................................
   // .........................................................
+  /**
+   * alternar()
+   *
+   */
   void alternar () {
-	if (encendido) {
-	  apagar();
-	} else {
-	  encender ();
-	}
+  	if (encendido) {
+  	  apagar();
+  	} else {
+  	  encender ();
+  	}
   } // ()
 
   // .........................................................
   // .........................................................
+  /**
+   * N -> brillar()
+   *
+   * @param tiempo ms en el que el LED esta encendido
+   *
+   */
   void brillar (long tiempo) {
-	encender ();
-	esperar(tiempo); 
-	apagar ();
+  	encender ();
+  	esperar(tiempo); 
+  	apagar ();
   }
 }; // class
 

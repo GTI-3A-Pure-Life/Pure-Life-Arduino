@@ -3,6 +3,11 @@
 #ifndef MEDIDOR_H_INCLUIDO
 #define MEDIDOR_H_INCLUIDO
 
+// ----------------------------------------------------------
+// Rubén Pardo Casanova
+// 2021-09-14
+// ----------------------------------------------------------
+
 // ------------------------------------------------------
 // ------------------------------------------------------
 class Medidor {
@@ -14,28 +19,46 @@ private:
 public:
 
   // .....................................................
-  // constructor
   // .....................................................
+  /**
+   * Constructor para la clase Medidor
+   *
+   */
   Medidor(  ) {
   } // ()
 
   // .....................................................
   // .....................................................
+  /**
+   * iniciarMedidor() 
+   */
   void iniciarMedidor() {
 	// las cosas que no se puedan hacer en el constructor, if any
   } // ()
 
   // .....................................................
   // .....................................................
+  /**
+   * medirCO2() -> N
+   *
+   * @returns el valor obtenido con el sensor de co2 (primera version con valores falsos).
+   *
+   */
   int medirCO2() {
-	return 235;
+	  return 235;
   } // ()
 
   // .....................................................
   // .....................................................
-  int medirTemperatura() {
-	return -12; // qué frío !
-  } // ()
+  /**
+   * medirTemperatura() -> N
+   *
+   * @returns el valor obtenido con el sensor de temperatura (primera version con valores falsos).
+   *
+   */
+  /*int medirTemperatura() {
+	  return -12; // qué frío !
+  } // ()*/
 	
 }; // class
 

@@ -2,8 +2,8 @@
 
 // --------------------------------------------------------------
 //
-// Jordi Bataller i Mascarell
-// 2019-07-07
+// Rubén Pardo Casanova
+// 2021-09-14
 //
 // --------------------------------------------------------------
 
@@ -52,6 +52,10 @@ namespace Globales {
 }; // namespace
 
 // --------------------------------------------------------------
+/**
+ * inicializarPlaquita()
+ *  Función que inicializa el micro y los pines
+ */
 // --------------------------------------------------------------
 void inicializarPlaquita () {
 
@@ -96,6 +100,10 @@ void setup() {
 } // setup ()
 
 // --------------------------------------------------------------
+/**
+ * lucecitas()
+ * Función que enciende 4 veces el LED con esperas entre medio
+ */
 // --------------------------------------------------------------
 inline void lucecitas() {
   using namespace Globales;
@@ -146,12 +154,12 @@ void loop () {
   // 
   // mido y publico
   // 
-  int valorTemperatura = elMedidor.medirTemperatura();
+  /*int valorTemperatura = elMedidor.medirTemperatura();
   
   elPublicador.publicarTemperatura( valorTemperatura, 
 									cont,
 									1000 // intervalo de emisión
-									);
+									);*/
 
   // 
   // prueba para emitir un iBeacon y poner
@@ -170,7 +178,7 @@ void loop () {
   };
 
   // elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( &datos[0], 21 );
-  elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( "MolaMolaMolaMolaMolaM", 21 );
+  elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( "GTI-3A-2%%%%%%", 21 );
 
   esperar( 2000 );
 
