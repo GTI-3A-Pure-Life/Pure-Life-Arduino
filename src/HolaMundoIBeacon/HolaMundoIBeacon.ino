@@ -144,7 +144,11 @@ void loop () {
   // 
   // mido y publico
   // 
-  int valorCO2 = elMedidor.medirCO2();
+  int valorCO2 = 0;
+
+ 
+  valorCO2 = elMedidor.medirCO2();
+  
   
   elPublicador.publicarCO2( valorCO2,
 							cont,
@@ -168,7 +172,7 @@ void loop () {
   // 
   // Al terminar la prueba hay que hacer Publicador::laEmisora privado
   // 
-  char datos[21] = {
+ /* char datos[21] = {
 	'H', 'o', 'l', 'a',
 	'H', 'o', 'l', 'a',
 	'H', 'o', 'l', 'a',
@@ -178,7 +182,7 @@ void loop () {
   };
 
   // elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( &datos[0], 21 );
-  elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( "GTI-3A-2%%%%%%", 21 );
+  elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( "GTI-3A-2%%%%%%", 21 );*/
 
   esperar( 2000 );
 
