@@ -1,8 +1,9 @@
 // -*- mode: c++ -*-
 
-// --------------------------------------------------------------
-// Jordi Bataller i Mascarell
-// --------------------------------------------------------------
+// ----------------------------------------------------------
+// Rubén Pardo Casanova
+// 2021-09-14
+// ----------------------------------------------------------
 
 #ifndef PUBLICADOR_H_INCLUIDO
 #define PUBLICADOR_H_INCLUIDO
@@ -16,15 +17,23 @@ class Publicador {
 private:
 
   uint8_t beaconUUID[16] = { 
-	'E', 'P', 'S', 'G', '-', 'G', 'T', 'I', 
-	'-', 'P', 'R', 'O', 'Y', '-', '3', 'A'
+	'G', 'T', 'I', '-', '3', 'A', '-', '1',
+	'%', '%', '%', '%', '%', '%', '%', '%'
 	};
+  /*
+   * uint8_t beaconUUID[16] = { 
+ 'G', 'T', 'I', '-', '3', 'A', '-', '1',
+  '-', 'P', 'R', 'O', 'Y', '-', '3', 'A'
+  };
+   */
 
   // ............................................................
   // ............................................................
 public:
+
+
   EmisoraBLE laEmisora {
-	"GTI-3A", //  nombre emisora
+	"GTI-3A-1", //  nombre emisora
 	  0x004c, // fabricanteID (Apple)
 	  4 // txPower
 	  };
@@ -38,13 +47,17 @@ public:
   // ............................................................
   // ............................................................
   enum MedicionesID  {
-	CO2 = 11,
-	TEMPERATURA = 12,
-	RUIDO = 13
+  	CO2 = 11,
+  	TEMPERATURA = 12,
+  	RUIDO = 13
   };
 
   // ............................................................
   // ............................................................
+  /**
+   * Constructor para la clase Publicador
+   *
+   */
   Publicador( ) {
 	// ATENCION: no hacerlo aquí. (*this).laEmisora.encenderEmisora();
 	// Pondremos un método para llamarlo desde el setup() más tarde
@@ -52,12 +65,24 @@ public:
 
   // ............................................................
   // ............................................................
+  /**
+   * encenderEmisora()
+   *
+   */
   void encenderEmisora() {
 	(*this).laEmisora.encenderEmisora();
   } // ()
 
   // ............................................................
   // ............................................................
+  /**
+   * N,N,N -> publicarCO2()
+   *
+   * @param valorCO2 
+   * @param contador numero de muestra
+   * @param tiempoEspera ms en el que el anuncio se esta emitiendo
+   *
+   */
   void publicarCO2( int16_t valorCO2, uint8_t contador,
 					long tiempoEspera ) {
 
@@ -94,7 +119,15 @@ public:
 
   // ............................................................
   // ............................................................
-  void publicarTemperatura( int16_t valorTemperatura,
+   /**
+   * N,N,N -> publicarTemperatura()
+   *
+   * @param valorTemperatura 
+   * @param contador numero para el calculo del valor del major del beacon
+   * @param tiempoEspera ms en el que el anuncio se esta emitiendo
+   *
+   */
+  /*void publicarTemperatura( int16_t valorTemperatura,
 							uint8_t contador, long tiempoEspera ) {
 
 	uint16_t major = (MedicionesID::TEMPERATURA << 8) + contador;
@@ -106,7 +139,7 @@ public:
 	esperar( tiempoEspera );
 
 	(*this).laEmisora.detenerAnuncio();
-  } // ()
+  } // ()*/
 	
 }; // class
 

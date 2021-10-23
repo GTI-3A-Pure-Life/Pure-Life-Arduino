@@ -9,3 +9,7 @@ Con el IDE Arduino seguir estos pasos de instalación:
 2. Herramientas -> Placa -> Gestor de Placas. Buscar nRF52 e instalar "Adafruit nRF52 by Adafruit"
 3. Herramientas -> Puerto. Ver qué placa ha detectado y elegirla (Por ejemplo: "Adafruit Feather nRF52840 Express")
 4. Herramientas -> Placa. Elegir la misma que en el paso anterior
+
+## Test
+Instalar en el teléfono la aplicación “nRF Connect”. Con ella podremos comprobar
+si nuestra placa arduino emite iBeacons
