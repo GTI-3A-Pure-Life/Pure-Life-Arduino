@@ -63,6 +63,10 @@ void inicializarPlaquita () {
 
 } // ()
 
+//--------------------------------------------------------------
+
+//------------------------------------------------------------------
+
 // --------------------------------------------------------------
 // setup()
 // --------------------------------------------------------------
@@ -70,29 +74,14 @@ void setup() {
 
   Globales::elPuerto.esperarDisponible();
 
-  // 
-  // 
-  // 
   inicializarPlaquita();
-
   // Suspend Loop() to save power
   // suspendLoop();
 
-  // 
-  // 
-  // 
   Globales::elPublicador.encenderEmisora();
 
-  // Globales::elPublicador.laEmisora.pruebaEmision();
-  
-  // 
-  // 
-  // 
   Globales::elMedidor.iniciarMedidor();
 
-  // 
-  // 
-  // 
   esperar( 1000 );
 
   Globales::elPuerto.escribir( "---- setup(): fin ---- \n " );
@@ -118,21 +107,26 @@ inline void lucecitas() {
   esperar ( 1000 ); //  100 apagado
 } // ()
 
+
+
 // --------------------------------------------------------------
 // loop ()
 // --------------------------------------------------------------
 namespace Loop {
   uint8_t cont = 0;
+  int bateria = 100;
+  int esperaEntreMedicionesMs = 3000; //1360
+  int esperaEntreBateria = esperaEntreMedicionesMs * 2;
 };
 
-// ..............................................................
-// ..............................................................
+/**
+ * modificado: Lorena-Ioana Florescu
+ * @version 04/11/2021
+ */
 void loop () {
 
   using namespace Loop;
   using namespace Globales;
-
-  cont++;
 
   elPuerto.escribir( "\n---- loop(): empieza " );
   elPuerto.escribir( cont );
@@ -144,47 +138,63 @@ void loop () {
   // 
   // mido y publico
   // 
-  int valorCO2 = 0;
-
+  int valorCO = 0;
+  int valorNO2 = 0;
+  int valorSO2 = 0;
+  int valorO3 = 0;
  
-  valorCO2 = elMedidor.medirCO2();
-  
-  
-  elPublicador.publicarCO2( valorCO2,
-							cont,
-							1000 // intervalo de emisión
-							);
-  
-  // 
-  // mido y publico
-  // 
-  /*int valorTemperatura = elMedidor.medirTemperatura();
-  
-  elPublicador.publicarTemperatura( valorTemperatura, 
-									cont,
-									1000 // intervalo de emisión
-									);*/
+  valorCO = elMedidor.medirCO();
+  valorSO2 = elMedidor.medirSO2();
+  valorNO2 = elMedidor.medirNO2();
+  valorO3 = elMedidor.medirO3();
 
-  // 
-  // prueba para emitir un iBeacon y poner
-  // en la carga (21 bytes = uuid 16 major 2 minor 2 txPower 1 )
-  // lo que queramos (sin seguir dicho formato)
-  // 
-  // Al terminar la prueba hay que hacer Publicador::laEmisora privado
-  // 
- /* char datos[21] = {
-	'H', 'o', 'l', 'a',
-	'H', 'o', 'l', 'a',
-	'H', 'o', 'l', 'a',
-	'H', 'o', 'l', 'a',
-	'H', 'o', 'l', 'a',
-	'H'
-  };
+  //valor random de CO
+  elPublicador.publicarCO(random(0,18),1000);
 
-  // elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( &datos[0], 21 );
-  elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( "GTI-3A-2%%%%%%", 21 );*/
+  //valor medido de CO
+//  elPublicador.publicarCO( valorCO,
+//							1000 // intervalo de emisión
+//							);
 
-  esperar( 2000 );
+//mediciones con valores random
+  elPublicador.publicarSO2( valorSO2,
+             1000 // intervalo de emisión
+              );
+  elPublicador.publicarNO2( valorNO2,
+              1000 // intervalo de emisión
+              );
+  elPublicador.publicarO3( valorO3,
+              1000 // intervalo de emisión
+              );
+ //mandar bateria
+  if (esperaEntreBateria == 0){
+        elPublicador.publicarBateria(bateria,
+              1000 // intervalo de emisión
+              );
+        if(bateria==0) bateria = 100;
+        else bateria = bateria - 10;
+ }
+/*  elPublicador.publicarBateria(bateria,
+              1000 // intervalo de emisión
+              );
+        if(bateria==0) bateria = 100;
+       else bateria = bateria - 10;*/
+
+
+//mediciones controladas
+  /*
+  if(cont ==0) elPublicador.publicarCO(1,1000);
+  if(cont ==1) elPublicador.publicarO3(20,1000);
+  if(cont ==2) elPublicador.publicarSO2(100,1000);
+  if(cont ==3) elPublicador.publicarNO2(60,1000);
+  if(cont ==4) elPublicador.publicarCO(10,1000);
+  if(cont ==5) elPublicador.publicarSO2(10,1000);
+  */
+  
+  esperar(esperaEntreMedicionesMs);
+
+  esperaEntreBateria -= esperaEntreMedicionesMs;
+  if (esperaEntreBateria <0) esperaEntreBateria = esperaEntreMedicionesMs * 2;
 
   elPublicador.laEmisora.detenerAnuncio();
   
@@ -194,6 +204,9 @@ void loop () {
   elPuerto.escribir( "---- loop(): acaba **** " );
   elPuerto.escribir( cont );
   elPuerto.escribir( "\n" );
+
+  cont++;
+  if (cont>5) cont = 0;
   
 } // loop ()
 // --------------------------------------------------------------

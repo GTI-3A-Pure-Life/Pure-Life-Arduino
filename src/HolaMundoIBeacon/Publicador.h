@@ -20,12 +20,6 @@ private:
 	'G', 'T', 'I', '-', '3', 'A', '-', '1',
 	'%', '%', '%', '%', '%', '%', '%', '%'
 	};
-  /*
-   * uint8_t beaconUUID[16] = { 
- 'G', 'T', 'I', '-', '3', 'A', '-', '1',
-  '-', 'P', 'R', 'O', 'Y', '-', '3', 'A'
-  };
-   */
 
   // ............................................................
   // ............................................................
@@ -47,9 +41,11 @@ public:
   // ............................................................
   // ............................................................
   enum MedicionesID  {
-  	CO2 = 11,
-  	TEMPERATURA = 12,
-  	RUIDO = 13
+    SO2 = 3,
+    O3 = 4,
+    NO2 = 2,
+    CO = 1,
+  	BATERIA = 1000
   };
 
   // ............................................................
@@ -76,36 +72,24 @@ public:
   // ............................................................
   // ............................................................
   /**
-   * N,N,N -> publicarCO2()
+   * 
+   * N,N,N -> publicarCO()
    *
-   * @param valorCO2 
-   * @param contador numero de muestra
+   * @param valorCO
    * @param tiempoEspera ms en el que el anuncio se esta emitiendo
    *
    */
-  void publicarCO2( int16_t valorCO2, uint8_t contador,
-					long tiempoEspera ) {
+  void publicarCO( int16_t valorCO, long tiempoEspera ) {
 
 	//
 	// 1. empezamos anuncio
 	//
-	uint16_t major = (MedicionesID::CO2 << 8) + contador;
+	uint16_t major = MedicionesID::CO;
 	(*this).laEmisora.emitirAnuncioIBeacon( (*this).beaconUUID, 
 											major,
-											valorCO2, // minor
+											valorCO, // minor
 											(*this).RSSI // rssi
 									);
-
-	/*
-	Globales::elPuerto.escribir( "   publicarCO2(): valor=" );
-	Globales::elPuerto.escribir( valorCO2 );
-	Globales::elPuerto.escribir( "   contador=" );
-	Globales::elPuerto.escribir( contador );
-	Globales::elPuerto.escribir( "   todo="  );
-	Globales::elPuerto.escribir( major );
-	Globales::elPuerto.escribir( "\n" );
-	*/
-
 	//
 	// 2. esperamos el tiempo que nos digan
 	//
@@ -117,29 +101,97 @@ public:
 	(*this).laEmisora.detenerAnuncio();
   } // ()
 
+
+   /**
+   * @author Lorena-Ioana Florescu
+   * @version 04/11/2021
+   * N,N,N -> publicarSO()
+   *
+   * @param valorSO 
+   * @param tiempoEspera ms en el que el anuncio se esta emitiendo
+   *
+   */
+  void publicarSO2( int16_t valorSO2, long tiempoEspera ) {
+
+  uint16_t major = MedicionesID::SO2;
+  (*this).laEmisora.emitirAnuncioIBeacon( (*this).beaconUUID, 
+                      major,
+                      valorSO2, // minor
+                      (*this).RSSI // rssi
+                  );
+  esperar(tiempoEspera);
+
+  (*this).laEmisora.detenerAnuncio();
+  } 
+
+   /**
+   * @author Lorena-Ioana Florescu
+   * @version 04/11/2021
+   * N,N,N -> publicarNO2()
+   *
+   * @param valorNO2
+   * @param tiempoEspera ms en el que el anuncio se esta emitiendo
+   *
+   */
+  void publicarNO2( int16_t valorNO2, long tiempoEspera ) {
+
+  uint16_t major = MedicionesID::NO2;
+  (*this).laEmisora.emitirAnuncioIBeacon( (*this).beaconUUID, 
+                      major,
+                      valorNO2, // minor
+                      (*this).RSSI // rssi
+                  );
+  esperar(tiempoEspera);
+
+  (*this).laEmisora.detenerAnuncio();
+  } 
+
+   /**
+   * @author Lorena-Ioana Florescu
+   * @version 04/11/2021
+   * N,N,N -> publicarO3()
+   *
+   * @param valorO3
+   * @param tiempoEspera ms en el que el anuncio se esta emitiendo
+   *
+   */
+  void publicarO3( int16_t valorO3, long tiempoEspera ) {
+
+  uint16_t major = MedicionesID::O3;
+  (*this).laEmisora.emitirAnuncioIBeacon( (*this).beaconUUID, 
+                      major,
+                      valorO3, // minor
+                      (*this).RSSI // rssi
+                  );
+  esperar(tiempoEspera);
+
+  (*this).laEmisora.detenerAnuncio();
+  } 
+
   // ............................................................
   // ............................................................
    /**
-   * N,N,N -> publicarTemperatura()
+   * @author Lorena-Ioana Florescu
+   * @version 04/11/2021
+   * N,N,N -> publicarBateria()
    *
-   * @param valorTemperatura 
+   * @param valorBateria 
    * @param contador numero para el calculo del valor del major del beacon
    * @param tiempoEspera ms en el que el anuncio se esta emitiendo
    *
    */
-  /*void publicarTemperatura( int16_t valorTemperatura,
-							uint8_t contador, long tiempoEspera ) {
+  void publicarBateria( int16_t valorBateria, long tiempoEspera ) {
 
-	uint16_t major = (MedicionesID::TEMPERATURA << 8) + contador;
+	uint16_t major = MedicionesID::BATERIA;
 	(*this).laEmisora.emitirAnuncioIBeacon( (*this).beaconUUID, 
 											major,
-											valorTemperatura, // minor
+											valorBateria, // minor
 											(*this).RSSI // rssi
 									);
-	esperar( tiempoEspera );
+	esperar(tiempoEspera);
 
 	(*this).laEmisora.detenerAnuncio();
-  } // ()*/
+  } 
 	
 }; // class
 
