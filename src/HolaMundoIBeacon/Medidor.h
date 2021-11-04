@@ -48,15 +48,15 @@ public:
   // .....................................................
   // .....................................................
   /**
-   * medirCO2() -> N
+   * medirCO() -> N
    *
    * @returns el valor obtenido con el sensor de co2 (primera version con valores falsos).
    *
    */
-  int medirCO2() {
+  int medirCO() {
      //medir varias veces y hacer un promedio para reducir error
     // 
-    Serial.println("EMPEZAR MEDIR CO2----------");
+    Serial.println("EMPEZAR MEDIR CO----------");
     int i = 0;// contador de los 11 valores
     int j = 0;// contador de veces
     
@@ -73,11 +73,43 @@ public:
      Serial1.flush();
     
     
-    Serial.print("TERMINAR MEDIR CO2---------- ");
+    Serial.print("TERMINAR MEDIR CO---------- ");
     Serial.println(sensorData[1]);
     
 	  return sensorData[1]/*/numMedidasAMedir*/;//devolvemos co2
   } // ()
+
+/** 
+ * @author Lorena-Ioana Florescu
+ * @version 04/11/2021
+ * medirSO2()
+ * Metodo para obtener la medicion de SO2
+ */
+  int medirSO2(){
+    return random(0,140);
+  }
+
+/**
+ * @author Lorena-Ioana Florescu
+ * @version 04/11/2021
+ * medirNO2()
+ * Metodo para obtener la medicion de NO2
+ */
+   int medirNO2(){
+    return random(0,115);
+  }
+
+/**
+ * @author Lorena-Ioana Florescu
+ * @version 04/11/2021
+ * medirO3()
+ * Metodo para obtener la medicion de O3
+ */
+    int medirO3(){
+    return random(0,95);
+  }
+
+
 
   
 }; // class
